@@ -18,9 +18,9 @@ import java.util.UUID;
 
 public class ReadCSVFunkos {
 
-    public List<Funko> readFileFunko() {
+    public ArrayList<Funko> readFileFunko() {
         String path = Paths.get("").toAbsolutePath().toString() + File.separator + "data" + File.separator + "funkos.csv";
-        List<Funko> funks = new ArrayList<>();
+        ArrayList<Funko> funks = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try(CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8))){
             String[] line;
