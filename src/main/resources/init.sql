@@ -1,0 +1,12 @@
+-- Cuidado que cada SGDB tiene su forma de crear tablas y datos
+DROP TABLE IF EXISTS FUNKO;
+CREATE TABLE IF NOT EXISTS FUNKO (
+    ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+    uuid UUID DEFAULT RANDOM_UUID(),
+    name VARCHAR(255) NOT NULL,
+    modelo VARCHAR(20) NOT NULL,
+    precio DOUBLE NOT NULL,
+    fecha_lanzamiento DATE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
