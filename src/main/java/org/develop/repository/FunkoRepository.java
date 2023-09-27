@@ -1,8 +1,10 @@
 package org.develop.repository;
 
-import java.util.Optional;
+import org.develop.model.Funko;
+
+import java.util.List;
 
 public interface FunkoRepository<T,ID> extends CRUDrepository<T,ID>{
-    Optional<T> findByName(String name);
+    List<Funko> findByName(String name);
 
 }

@@ -23,8 +23,10 @@ dependencies {
     implementation("com.opencsv:opencsv:5.8")
         // Ibatis lo usaremos para leer los scripts SQL desde archivos
     implementation("org.mybatis:mybatis:3.5.13")
-     // H2, solo usa una
+    // https://mvnrepository.com/artifact/com.h2database/h2
     implementation("com.h2database:h2:2.2.224")
+
+
 }
 
 tasks.test {

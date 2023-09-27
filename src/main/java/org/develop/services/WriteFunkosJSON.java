@@ -11,11 +11,12 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class WriteFunkosJSON {
 
-  public boolean writeJSON(String routePath, ArrayList<Funko> funks) {
+  public boolean writeJSON(String routePath, List<Funko> funks) {
     String path = Paths.get("").toAbsolutePath().toString() + File.separator + "data" + File.separator + routePath;
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())

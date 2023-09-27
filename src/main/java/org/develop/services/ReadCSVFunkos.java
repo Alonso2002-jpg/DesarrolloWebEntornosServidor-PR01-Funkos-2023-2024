@@ -4,12 +4,14 @@ import com.opencsv.CSVReader;
 import org.develop.locale.MyLocale;
 import org.develop.model.Funko;
 import org.develop.model.Modelo;
+import org.develop.repository.FunkoRepositoryImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.security.PublicKey;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class ReadCSVFunkos {
+
 
     public ArrayList<Funko> readFileFunko() {
         String path = Paths.get("").toAbsolutePath().toString() + File.separator + "data" + File.separator + "funkos.csv";
@@ -40,6 +43,7 @@ public class ReadCSVFunkos {
 
         return funks;
     }
+
 
     public static void main(String[] args) {
         ReadCSVFunkos rs = new ReadCSVFunkos();
