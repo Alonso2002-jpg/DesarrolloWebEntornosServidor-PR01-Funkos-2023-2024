@@ -1,9 +1,11 @@
 package org.develop.repository;
 
+import org.develop.excepciones.FunkoNotFoundException;
+import org.develop.excepciones.FunkoNotSaveException;
 import org.develop.model.Funko;
 import org.develop.model.Modelo;
-import org.develop.services.DatabaseManager;
-import org.develop.services.WriteFunkosJSON;
+import org.develop.services.database.DatabaseManager;
+import org.develop.services.file.WriteFunkosJSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +16,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class FunkoRepositoryImpl implements FunkoRepository<Funko,Integer>{
-    private static FunkoRepositoryImpl instance;
-    private final Logger logger = LoggerFactory.getLogger(FunkoRepositoryImpl.class);
+public class FunkoRepositoryImpl implements FunkoRepository{
 
+    private static FunkoRepositoryImpl instance;
+
+    private final Logger logger = LoggerFactory.getLogger(FunkoRepositoryImpl.class);
     private final DatabaseManager db;
 
     private FunkoRepositoryImpl(DatabaseManager db){
@@ -33,7 +36,7 @@ public class FunkoRepositoryImpl implements FunkoRepository<Funko,Integer>{
     }
 
     @Override
-    public Funko save(Funko funko) {
+    public Funko save(Funko funko) throws SQLException, FunkoNotSaveException {
         String sqlQuery = "INSERT INTO Funko (uuid, name, modelo, precio, fecha_lanzamiento) VALUES (?, ?, ?, ?, ?)";
     try (var conn = db.getConnection();
          var stmt = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);) {
@@ -51,15 +54,18 @@ public class FunkoRepositoryImpl implements FunkoRepository<Funko,Integer>{
                 funko.setId(rs.getInt(1)); // Obtiene el ID generado automáticamente
             }
             rs.close();
+        }else{
+            logger.error("Objeto no guardado en la base de datos");
+            throw new FunkoNotSaveException("Funko con nombre "+ funko.getName() + " no almacenado en la BD");
         }
-    } catch (SQLException e) {
-        logger.error("ERROR : "+e.getMessage(), e);
+    }catch (SQLException e) {
+        logger.error("ERROR: " + e.getMessage(),e);
     }
     return funko;
     }
 
     @Override
-    public Funko update(Funko funko){
+    public Funko update(Funko funko) throws SQLException, FunkoNotFoundException {
         logger.info("Actualizando Objeto ..... ");
         String sqlQuery = "UPDATE Funko SET name = ? , modelo = ?, precio = ? , updated_at = ? WHERE id = ?";
         try (var conn = db.getConnection();
@@ -71,18 +77,18 @@ public class FunkoRepositoryImpl implements FunkoRepository<Funko,Integer>{
             stmt.setInt(5,funko.getId());
             var rs = stmt.executeUpdate();
             if (rs <= 0 ){
-                return new Funko();
+                logger.error("Funko no encontrado en la BD");
+                throw new FunkoNotFoundException("Funko con ID " + funko.getId() + " no encontrado en la BD");
             }
+
             logger.debug("Objeto Actualizado Correctamente!");
-        }catch (SQLException e){
-            logger.error("ERROR : "+e.getMessage(), e);
         }
 
         return funko;
     }
 
     @Override
-    public Optional<Funko> findById(Integer id) {
+    public Optional<Funko> findById(Integer id) throws SQLException{
         logger.info("Buscando Objeto con ID "+ id + "......");
         String sqlQuery = "SELECT * FROM Funko WHERE id = ?";
         Optional<Funko> funk = Optional.empty();
@@ -99,9 +105,8 @@ public class FunkoRepositoryImpl implements FunkoRepository<Funko,Integer>{
                 fk.setFecha_lanzamiento(rs.getDate("fecha_lanzamiento").toLocalDate());
                 funk = Optional.of(fk);
             }
-            logger.debug("Objeto con ID: " + id + " encontrado!");
         }catch (SQLException e){
-            logger.error("ERROR : "+e.getMessage(), e);
+            logger.error("ERROR: " + e.getMessage(),e);
         }
 
         return funk;
@@ -109,7 +114,7 @@ public class FunkoRepositoryImpl implements FunkoRepository<Funko,Integer>{
 
 
     @Override
-    public List<Funko> findAll() {
+    public List<Funko> findAll() throws SQLException{
         logger.info("Obteniendo todos los Objetos");
         String sqlQuery = "SELECT * FROM Funko";
         List<Funko> funks = new ArrayList<>();
@@ -127,13 +132,13 @@ public class FunkoRepositoryImpl implements FunkoRepository<Funko,Integer>{
             }
         logger.debug("Objetos Obtenidos Correctamente");
         }catch (SQLException e){
-            logger.error("ERROR : "+e.getMessage(), e);
+            logger.error("ERROR: " + e.getMessage(),e);
         }
         return funks;
     }
 
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(Integer id) throws SQLException{
         logger.info("Eliminando Objeto con ID " + id + "..........");
         String sqlQuery = "DELETE FROM Funko WHERE id = ? ";
         try (var conn = db.getConnection(); var stmt = conn.prepareStatement(sqlQuery)){
@@ -144,27 +149,27 @@ public class FunkoRepositoryImpl implements FunkoRepository<Funko,Integer>{
                 return true;
             }
         }catch (SQLException e){
-            logger.error("ERROR : "+e.getMessage(), e);
+            logger.error("ERROR: " + e.getMessage(),e);
         }
         return false;
     }
 
 
     @Override
-    public void deleteAll() {
+    public void deleteAll() throws SQLException{
         logger.info("Eliminando Objetos de la BD......");
         String sqlQuery = "DELETE FROM Funko";
         try (var conn = db.getConnection(); var stmt = conn.prepareStatement(sqlQuery)){
-            var rs = stmt.executeUpdate();
+            stmt.executeUpdate();
         }catch (SQLException e){
-            logger.error("ERROR : "+e.getMessage(), e);
+            logger.error("ERROR: " + e.getMessage(),e);
         }
         logger.info("Objetos eliminados Correctamente");
     }
 
 
     @Override
-    public List<Funko> findByName(String name) {
+    public List<Funko> findByName(String name) throws SQLException{
         logger.info("Obtener Funko con Nombre "+name+".......");
         List<Funko> funks = new ArrayList<>();
         String sqlQuery = "SELECT * FROM Funko WHERE name LIKE ?";
@@ -182,15 +187,15 @@ public class FunkoRepositoryImpl implements FunkoRepository<Funko,Integer>{
                 funks.add(fk);
             }
             logger.debug("Objeto obtenido con nombre: " + name);
-        }catch (SQLException e){
-            logger.error("ERROR : "+e.getMessage(), e);
+        }catch (SQLException e) {
+            logger.error("ERROR: " + e.getMessage(),e);
         }
 
         return funks;
     }
 
         @Override
-    public boolean backup(String name){
+    public boolean backup(String name) throws SQLException{
         String file = name+ ".json";
         logger.info("Iniciando Backup de la Base de Datos......");
         WriteFunkosJSON wrJSON = new WriteFunkosJSON();

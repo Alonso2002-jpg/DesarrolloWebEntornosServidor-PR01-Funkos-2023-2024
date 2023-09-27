@@ -1,4 +1,4 @@
-package org.develop.services;
+package org.develop.services.file;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,12 +7,9 @@ import org.develop.model.Funko;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class WriteFunkosJSON {
 

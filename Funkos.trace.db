@@ -1354,3 +1354,8 @@ DELETE FROM Funko WHERE id = ? [90012-224]
 	at org.h2.jdbc.JdbcPreparedStatement.executeUpdate(JdbcPreparedStatement.java:174)
 	at org.develop.repository.FunkoRepositoryImpl.deleteById(FunkoRepositoryImpl.java:142)
 	at org.develop.Main.main(Main.java:42)
+2023-09-27 02:49:54.337811+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "[*]logger.error(""ERROR : ""+e.getMessage(), e)\000d\000a"
+Syntax error in SQL statement "[*]logger.error(""ERROR : ""+e.getMessage(), e)\000d\000a"; SQL statement:
+logger.error("ERROR : "+e.getMessage(), e)
+ [42000-224]

@@ -6,7 +6,6 @@ import java.util.Optional;
 
 public interface CRUDrepository<T,ID>{
 
- // Métodos que vamos a usar
     // Guardar
     T save(T t) throws SQLException;
 
