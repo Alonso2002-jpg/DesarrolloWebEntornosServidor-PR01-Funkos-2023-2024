@@ -2,7 +2,6 @@ package org.develop;
 
 import org.develop.excepciones.FunkoException;
 import org.develop.model.Funko;
-import org.develop.model.Modelo;
 import org.develop.repository.FunkoRepositoryImpl;
 import org.develop.services.database.DatabaseManager;
 import org.develop.services.file.ReadCSVFunkos;
@@ -73,13 +72,18 @@ public class Main {
         DatabaseManager db = DatabaseManager.getInstance();
         FunkoRepositoryImpl fkRepImp = FunkoRepositoryImpl.getInstance(db);
         FunkoServiceImpl fkImp = FunkoServiceImpl.getInstance(fkRepImp);
-        //Insercion en Base de Datos del fichero
-            for (Funko funko : rs.readFileFunko()) {
-                fkImp.save(funko);
-            }
-            List<Funko> funkos = fkImp.findAll();
 
-            main.operacionesStreamBD(fkImp,funkos);
+
+
+//        //Insercion en Base de Datos del fichero
+//            for (Funko funko : rs.readFileFunko()) {
+//                fkImp.save(funko);
+//            }
+//
+//            var atr = fkImp.backup("funkos");
+//            List<Funko> funkos = fkImp.findAll();
+//
+//            main.operacionesStreamBD(fkImp,funkos);
 
 //
 //        //Obtener Funko por ID

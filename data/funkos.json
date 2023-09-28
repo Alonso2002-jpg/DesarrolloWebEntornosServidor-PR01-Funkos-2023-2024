@@ -24,6 +24,14 @@
     "fecha_lanzamiento": "2022-08-01"
   },
   {
+    "id": 4,
+    "uuid": "a8f7ae42-5b01-4d3b-82ab-02d1a2d6e443",
+    "name": "Iron Man Classic",
+    "modelo": "MARVEL",
+    "precio": 18.99,
+    "fecha_lanzamiento": "2022-06-01"
+  },
+  {
     "id": 5,
     "uuid": "0b6c6f58-7c6b-434b-82ab-01b2d6e4434a",
     "name": "Stitch Space Suit",

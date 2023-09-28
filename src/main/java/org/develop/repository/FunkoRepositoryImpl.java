@@ -58,8 +58,6 @@ public class FunkoRepositoryImpl implements FunkoRepository{
             logger.error("Objeto no guardado en la base de datos");
             throw new FunkoNotSaveException("Funko con nombre "+ funko.getName() + " no almacenado en la BD");
         }
-    }catch (SQLException e) {
-        logger.error("ERROR: " + e.getMessage(),e);
     }
     return funko;
     }
@@ -138,7 +136,7 @@ public class FunkoRepositoryImpl implements FunkoRepository{
     }
 
     @Override
-    public boolean deleteById(Integer id) throws SQLException{
+    public boolean deleteById(Integer id) throws SQLException {
         logger.info("Eliminando Objeto con ID " + id + "..........");
         String sqlQuery = "DELETE FROM Funko WHERE id = ? ";
         try (var conn = db.getConnection(); var stmt = conn.prepareStatement(sqlQuery)){
@@ -147,11 +145,10 @@ public class FunkoRepositoryImpl implements FunkoRepository{
             if (rs>0){
                 logger.info("Eliminado correctamente");
                 return true;
+            }else{
+                throw new FunkoNotFoundException("Funko con ID " + id + " no encontrado en la BD");
             }
-        }catch (SQLException e){
-            logger.error("ERROR: " + e.getMessage(),e);
         }
-        return false;
     }
 
 

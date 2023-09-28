@@ -33,7 +33,7 @@ public class FunkoServiceImpl implements FunkoService {
 
         };
     }
-
+    
     public static FunkoServiceImpl getInstance(FunkoRepository funkoRepository){
             if (instance==null){
                 instance=new FunkoServiceImpl(funkoRepository);

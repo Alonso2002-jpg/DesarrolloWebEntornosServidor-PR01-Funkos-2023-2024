@@ -18,7 +18,6 @@ public class Funko {
     private Modelo modelo;
     private double precio;
     private LocalDate fecha_lanzamiento;
-
     @Override
     public String toString() {
         return "Funko{" +
